@@ -7,6 +7,12 @@
     <title>Blog</title>
 </head>
 <body>
-    {{%for post in %}}
+    {% for post in posts %}
+    <div>
+        <h1>{{post.title}}</h1>
+        <p>{{post.text}}</p>
+        <p>{{post.published_date|linebreaksbr}}</p>
+    </div>
+    {% endfor %}
 </body>
 </html>
