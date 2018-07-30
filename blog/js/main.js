@@ -1,28 +1,96 @@
-var slideIndex = 1;
-showSlides(slideIndex);
+class IndexForSibling {
+	static get(el){
+		let children = el.parentNode.children;
 
-// Next/previous controls
-function plusSlides(n) {
-  showSlides(slideIndex += n);
+		for (var i = 0; i < children.length; i++) {
+			let child = children[i];
+			if(child == el) return i;
+		}
+	}
 }
 
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides(slideIndex = n);
+
+class Slider {
+	constructor(selector,movimiento=true){
+	   this.move = this.move.bind(this);
+	   this.moveByButton = this.moveByButton.bind(this);
+       this.Slider = document.querySelector(selector);
+       this.itemsCount = this.Slider.querySelectorAll(".container > *").length;
+       
+       this.interval = null;
+       this.contador = 0;
+       this.movimiento = movimiento;
+       
+       this.start();
+       
+       this.buildControls();
+       this.bindEvents();
+	}
+
+
+	start () {
+		if(!this.movimiento) return;
+        this.interval = window.setInterval(this.move,3000);
+	}
+
+
+	restart(){
+		if(this.interval)window.clearInterval(this.interval);
+		this.start();
+	}
+
+
+	bindEvents(){
+		this.Slider.querySelectorAll(".controls li")
+           .forEach(item => {
+                item.addEventListener("click",this.moveByButton)
+           });
+	}
+
+
+	moveByButton(ev){
+         let index = IndexForSibling.get(ev.currentTarget);
+         this.contador = index;
+         this.moveTo(index);
+         this.restart();
+	}
+
+
+	buildControls () {
+		for (var i = 0; i < this.itemsCount; i++) {
+			let control = document.createElement("li");
+
+			if(i == 0) control.classList.add("active");
+			this.Slider.querySelector(".controls ul").appendChild(control);
+		}
+	}
+
+
+	move () {
+		this.contador++;
+        if(this.contador > this.itemsCount - 1) this.contador = 0;
+        this.moveTo(this.contador);
+	}
+
+	resetIndicator (){
+       this.Slider.querySelectorAll(".controls li.active")
+           .forEach(item => item.classList.remove("active"));
+	}
+
+
+	moveTo(index) {
+		let  left = index * 100;
+		this.resetIndicator();
+        this.Slider.querySelector(".controls li:nth-child("+(index+1)+")").classList.add("active");
+		this.Slider.querySelector(".container").style.left = "-"+left+"%";
+	}
 }
 
-function showSlides(n) {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1} 
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none"; 
-  }
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block"; 
-  dots[slideIndex-1].className += " active";
-}
+
+
+
+(function(){
+   
+   new Slider(".slider",true);
+
+})();
