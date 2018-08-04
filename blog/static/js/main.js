@@ -1,4 +1,4 @@
-class IndexForSibling {
+/*class IndexCarousel {
 	static get(el){
 		let children = el.parentNode.children;
 
@@ -49,7 +49,7 @@ class Slider {
 
 
 	moveByButton(ev){
-         let index = IndexForSibling.get(ev.currentTarget);
+         let index = IndexCarousel.get(ev.currentTarget);
          this.contador = index;
          this.moveTo(index);
          this.restart();
@@ -93,4 +93,4 @@ class Slider {
    
    new Slider(".slider",true);
 
-})();
+})();*/
