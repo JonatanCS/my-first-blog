@@ -5,8 +5,9 @@
 
    {% include 'blog/carousel.html' %}
    
+   {% include 'blog/sidebar.html' %}
    {% for post in posts %}
-    <div>
+    <div id="post_list" class="container">
         <h1><a href="{% url 'post_detail' pk=post.pk %}">{{post.title}}</a></h1>
         <p>{{post.text}}</p>
         <p>{{post.published_date|linebreaksbr}}</p>
